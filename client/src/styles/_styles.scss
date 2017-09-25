@@ -1,0 +1,100 @@
+/* SilverWare Testimonials Styles
+===================================================================================================================== */
+
+.testimonialpage {
+  
+  .testimonials {
+    
+    margin: $spacer-double 0;
+    
+    .testimonial {
+      
+      margin-bottom: $spacer-double;
+      
+      > .content {
+        
+        color: $testimonial-text-color;
+        padding: $spacer-double;
+        position: relative;
+        
+        border: {
+          color: $testimonial-border-color;
+          width: $testimonial-border-width;
+          style: solid;
+        }
+        
+        &:before {
+          content: "";
+          width: 0;
+          right: 20px;
+          bottom: -20px;
+          display: block;
+          position: absolute;
+          border: {
+            width: 20px 20px 0;
+            style: solid;
+            color: $testimonial-border-color transparent;
+          }
+        }
+        
+        &:after {
+          content: "";
+          width: 0;
+          right: 23px;
+          bottom: -17px;
+          display: block;
+          position: absolute;
+          border: {
+            width: 17px 17px 0;
+            style: solid;
+            color: #fff transparent;
+          }
+        }
+        
+        > p:last-child {
+          margin-bottom: 0;
+        }
+        
+      }
+      
+      > footer {
+        
+        color: $testimonial-footer-color;
+        margin-top: $spacer-ample;
+        line-height: $testimonial-footer-line-height;
+        
+        div.text {
+          
+          text-align: right;
+          padding-right: $spacer-half;
+          
+          .author {
+            font-weight: bold;
+          }
+          
+          .organisation {
+            font-size: $testimonial-organisation-font-size;
+          }
+          
+          .date {
+            color: $testimonial-date-color;
+            font-size: $testimonial-date-font-size;
+          }
+          
+        }
+        
+        div.image {
+          
+          img {
+            margin-right: 3px;
+          }
+          
+        }
+        
+      }
+      
+    }
+    
+  }
+  
+}
