@@ -7,7 +7,7 @@
       <div class="author">
         $Author
       </div>
-      <% if $Position %>
+      <% if $PositionShown %>
         <div class="position">
           $Position
         </div>

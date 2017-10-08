@@ -6,6 +6,6 @@ Name: silverware-testimonials
 
 SilverWare\Testimonials\Pages\TestimonialPageController:
   required_js:
-    - silverware-testimonials/client/dist/js/bundle.js
+    - "silverware/testimonials: client/dist/js/bundle.js"
   required_css:
-    - silverware-testimonials/client/dist/styles/bundle.css
+    - "silverware/testimonials: client/dist/styles/bundle.css"
