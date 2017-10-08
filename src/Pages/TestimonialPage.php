@@ -81,7 +81,7 @@ class TestimonialPage extends Page implements ListSource
      * @var string
      * @config
      */
-    private static $icon = 'silverware-testimonials/admin/client/dist/images/icons/TestimonialPage.png';
+    private static $icon = 'silverware/testimonials: admin/client/dist/images/icons/TestimonialPage.png';
     
     /**
      * Maps field names to field types for this object.
@@ -117,7 +117,7 @@ class TestimonialPage extends Page implements ListSource
         'SortBy' => 'random',
         'ImageResizeWidth' => 80,
         'ImageResizeHeight' => 80,
-        'ImageResizeMethod' => 'fit',
+        'ImageResizeMethod' => 'fill-priority',
         'ImageCornerStyle' => 'circular'
     ];
     

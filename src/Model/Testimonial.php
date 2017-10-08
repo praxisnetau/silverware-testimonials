@@ -19,6 +19,7 @@ namespace SilverWare\Testimonials\Model;
 
 use SilverStripe\Forms\CheckboxField;
 use SilverStripe\Forms\DateField;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\HTMLEditor\HTMLEditorField;
 use SilverStripe\Forms\RequiredFields;
@@ -49,6 +50,13 @@ class Testimonial extends DataObject
     use CMSMainPermissions;
     
     /**
+     * Define title mode constants.
+     */
+    const TITLE_MODE_AUTHOR     = 'author';
+    const TITLE_MODE_AUTHOR_POS = 'author-position';
+    const TITLE_MODE_AUTHOR_ORG = 'author-organisation';
+    
+    /**
      * Human-readable singular name.
      *
      * @var string
@@ -76,6 +84,8 @@ class Testimonial extends DataObject
         'Content' => 'HTMLText',
         'Position' => 'Varchar(128)',
         'Organisation' => 'Varchar(128)',
+        'TitleMode' => 'Varchar(32)',
+        'ShowPosition' => 'Boolean',
         'ShowOrganisation' => 'Boolean',
         'ShowDate' => 'Boolean',
         'Disabled' => 'Boolean'
@@ -98,6 +108,8 @@ class Testimonial extends DataObject
      * @config
      */
     private static $defaults = [
+        'TitleMode' => 'author-position',
+        'ShowPosition' => 1,
         'ShowOrganisation' => 0,
         'ShowDate' => 0,
         'Disabled' => 0
@@ -178,7 +190,7 @@ class Testimonial extends DataObject
      * @var string
      * @config
      */
-    private static $asset_folder = 'Testimonials';
+    private static $meta_image_folder = 'Testimonials';
     
     /**
      * Answers a list of field objects for the CMS interface.
@@ -238,9 +250,18 @@ class Testimonial extends DataObject
         $fields->addFieldsToTab(
             'Root.Options',
             [
+                DropdownField::create(
+                    'TitleMode',
+                    $this->fieldLabel('TitleMode'),
+                    $this->getTitleModeOptions()
+                ),
                 CheckboxField::create(
                     'ShowDate',
                     $this->fieldLabel('ShowDate')
+                ),
+                CheckboxField::create(
+                    'ShowPosition',
+                    $this->fieldLabel('ShowPosition')
                 ),
                 CheckboxField::create(
                     'ShowOrganisation',
@@ -294,7 +315,9 @@ class Testimonial extends DataObject
         $labels['Options'] = _t(__CLASS__ . '.OPTIONS', 'Options');
         $labels['ShowDate'] = _t(__CLASS__ . '.SHOWDATE', 'Show date');
         $labels['Position'] = _t(__CLASS__ . '.POSITION', 'Position');
+        $labels['TitleMode'] = _t(__CLASS__ . '.TITLEMODE', 'Title mode');
         $labels['Organisation'] = _t(__CLASS__ . '.ORGANISATION', 'Organisation');
+        $labels['ShowPosition'] = _t(__CLASS__ . '.SHOWPOSITION', 'Show position');
         $labels['ShowOrganisation'] = _t(__CLASS__ . '.SHOWORGANISATION', 'Show organisation');
         $labels['StripThumbnail'] = _t(__CLASS__ . '.IMAGE', 'Image');
         $labels['Disabled'] = $labels['Disabled.Nice'] = _t(__CLASS__ . '.DISABLED', 'Disabled');
@@ -340,13 +363,23 @@ class Testimonial extends DataObject
     }
     
     /**
-     * Answers the name of the asset folder used for uploading images.
+     * Answers the meta date for the testimonial.
+     *
+     * @return DBDate
+     */
+    public function getMetaDate()
+    {
+        return $this->dbObject('Date');
+    }
+    
+    /**
+     * Answers the meta link for the testimonial.
      *
      * @return string
      */
-    public function getMetaImageFolder()
+    public function getMetaLink()
     {
-        return $this->config()->asset_folder;
+        return $this->getParent()->Link();
     }
     
     /**
@@ -376,7 +409,14 @@ class Testimonial extends DataObject
      */
     public function getMetaTitle()
     {
-        return $this->getAuthorAndPosition();
+        switch ($this->TitleMode) {
+            case self::TITLE_MODE_AUTHOR:
+                return $this->Author;
+            case self::TITLE_MODE_AUTHOR_ORG:
+                return $this->getAuthorAndOrganisation();
+            default:
+                return $this->getAuthorAndPosition();
+        }
     }
     
     /**
@@ -388,6 +428,20 @@ class Testimonial extends DataObject
     {
         if ($this->Position) {
             return sprintf('%s, %s', $this->Author, $this->Position);
+        }
+        
+        return $this->Author;
+    }
+    
+    /**
+     * Answers a string with the author name and organisation (if available).
+     *
+     * @return string
+     */
+    public function getAuthorAndOrganisation()
+    {
+        if ($this->Organisation) {
+            return sprintf('%s, %s', $this->Author, $this->Organisation);
         }
         
         return $this->Author;
@@ -437,6 +491,16 @@ class Testimonial extends DataObject
     public function getDateShown()
     {
         return ($this->Date && $this->ShowDate);
+    }
+    
+    /**
+     * Answers true if the position is to be shown in the template.
+     *
+     * @return boolean
+     */
+    public function getPositionShown()
+    {
+        return ($this->Position && $this->ShowPosition);
     }
     
     /**
@@ -521,5 +585,19 @@ class Testimonial extends DataObject
     public function getContentOrSummary()
     {
         return $this->Content ?: $this->MetaSummary;
+    }
+    
+    /**
+     * Answers an array of options for the title mode field.
+     *
+     * @return array
+     */
+    public function getTitleModeOptions()
+    {
+        return [
+            self::TITLE_MODE_AUTHOR     => _t(__CLASS__ . '.AUTHOR', 'Author'),
+            self::TITLE_MODE_AUTHOR_POS => _t(__CLASS__ . '.AUTHORANDPOSITION', 'Author and Position'),
+            self::TITLE_MODE_AUTHOR_ORG => _t(__CLASS__ . '.AUTHORANDORGANISATION', 'Author and Organisation')
+        ];
     }
 }
