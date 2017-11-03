@@ -19,10 +19,10 @@ namespace SilverWare\Testimonials\Pages;
 
 use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\GridField\GridField;
-use SilverStripe\Forms\GridField\GridFieldConfig_RecordEditor;
 use SilverStripe\Forms\TextField;
 use SilverWare\Forms\DimensionsField;
 use SilverWare\Forms\FieldSection;
+use SilverWare\Forms\GridField\GridFieldConfig_OrderableEditor;
 use SilverWare\Lists\ListSource;
 use SilverWare\Tools\ImageTools;
 use SilverWare\Testimonials\Model\Testimonial;
@@ -48,6 +48,7 @@ class TestimonialPage extends Page implements ListSource
     /**
      * Define sort constants.
      */
+    const SORT_ORDER  = 'order';
     const SORT_RANDOM = 'random';
     const SORT_RECENT = 'recent';
     
@@ -148,7 +149,7 @@ class TestimonialPage extends Page implements ListSource
                 'Testimonials',
                 $this->fieldLabel('Testimonials'),
                 $this->Testimonials(),
-                GridFieldConfig_RecordEditor::create()
+                GridFieldConfig_OrderableEditor::create()
             )
         );
         
@@ -274,6 +275,9 @@ class TestimonialPage extends Page implements ListSource
     {
         switch ($this->SortBy) {
             
+            case self::SORT_ORDER:
+                return 'Sort';
+            
             case self::SORT_RECENT:
                 return 'Date DESC';
             
@@ -291,6 +295,7 @@ class TestimonialPage extends Page implements ListSource
     public function getSortByOptions()
     {
         return [
+            self::SORT_ORDER  => _t(__CLASS__ . '.ORDER', 'Order'),
             self::SORT_RANDOM => _t(__CLASS__ . '.RANDOM', 'Random'),
             self::SORT_RECENT => _t(__CLASS__ . '.RECENT', 'Recent')
         ];

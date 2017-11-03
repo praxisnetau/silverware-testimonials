@@ -73,12 +73,21 @@ class Testimonial extends DataObject
     private static $plural_name = 'Testimonials';
     
     /**
+     * Defines the default sort field and order for this object.
+     *
+     * @var string
+     * @config
+     */
+    private static $default_sort = 'Sort';
+    
+    /**
      * Maps field names to field types for this object.
      *
      * @var array
      * @config
      */
     private static $db = [
+        'Sort' => 'Int',
         'Date' => 'Date',
         'Author' => 'Varchar(128)',
         'Content' => 'HTMLText',
@@ -124,14 +133,6 @@ class Testimonial extends DataObject
     private static $casting = [
         'ContentOrSummary' => 'HTMLFragment'
     ];
-    
-    /**
-     * Defines the default sort field and order for this object.
-     *
-     * @var string
-     * @config
-     */
-    private static $default_sort = '"Date" DESC';
     
     /**
      * Defines the summary fields of this object.
