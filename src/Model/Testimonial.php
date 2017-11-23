@@ -343,7 +343,7 @@ class Testimonial extends DataObject
         // Publish Image:
         
         if ($this->hasMetaImage()) {
-            $this->ImageMeta()->publishRecursive();
+            $this->ImageMeta()->publishSingle();
         }
     }
     
