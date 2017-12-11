@@ -81,6 +81,14 @@ class Testimonial extends DataObject
     private static $default_sort = 'Sort';
     
     /**
+     * Defines the table name to use for this object.
+     *
+     * @var string
+     * @config
+     */
+    private static $table_name = 'SilverWare_Testimonial';
+    
+    /**
      * Maps field names to field types for this object.
      *
      * @var array
