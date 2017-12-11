@@ -85,6 +85,14 @@ class TestimonialPage extends Page implements ListSource
     private static $icon = 'silverware/testimonials: admin/client/dist/images/icons/TestimonialPage.png';
     
     /**
+     * Defines the table name to use for this object.
+     *
+     * @var string
+     * @config
+     */
+    private static $table_name = 'SilverWare_TestimonialPage';
+    
+    /**
      * Maps field names to field types for this object.
      *
      * @var array
